@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  minio:
+    image: minio/minio:RELEASE.2024-03-09T01-07-33Z
+    container_name: minio
+    restart: unless-stopped
+    environment:
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL}
+      MINIO_PRIVATE_ENDPOINT: ${MINIO_PRIVATE_ENDPOINT}
+      MINIO_PRIVATE_HOST: ${MINIO_PRIVATE_HOST}
+      MINIO_PRIVATE_PORT: ${MINIO_PRIVATE_PORT}
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT}
+      MINIO_PUBLIC_HOST: ${MINIO_PUBLIC_HOST}
+      MINIO_PUBLIC_PORT: ${MINIO_PUBLIC_PORT}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "${PORT}:${MINIO_PUBLIC_PORT}"
+      - "${MINIO_PRIVATE_PORT}:${MINIO_PRIVATE_PORT}"
+    command: server /data --console-address ":${MINIO_PUBLIC_PORT}"
+    volumes:
+      - minio-data:/data
+
+volumes:
+  minio-data:
+
